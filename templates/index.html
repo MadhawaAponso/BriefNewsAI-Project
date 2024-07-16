@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BriefNews AI</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dark-theme.css') }}" id="theme-style">
+</head>
+<body onload="initializeAuthors()">
+    <h1 class="heading">BriefNews AI</h1>
+    <div class="description-box">
+        <p class="description para">With our service, you can easily summarize any web page's content. Simply enter the URL of the website you want to summarize, or a YouTube video URL, and our AI-powered engine will extract the key information for you. Get concise summaries of articles, blogs, and video content in just seconds. Try it now and streamline your reading experience!</p>
+    </div>
+
+    <form method="POST" class="form">
+        <input type="text" name="url" id="url" required placeholder="Enter a news article or YouTube video URL">
+        <button type="submit">
+            <svg width="2em" height="3em" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 pointer-events-none">
+                <path d="M19.593 13.812c-.196.287-.455.53-.758.71L8.594 20.648c-1.13.679-2.591.348-3.262-.735a2.226 2.226 0 01-.25-1.772c.522-1.883.81-3.766.866-5.65a23.312 23.312 0 00-.534-5.66c-.269-1.243.558-2.484 1.845-2.77a2.396 2.396 0 011.811.308l9.88 6.251c1.09.69 1.378 2.12.643 3.193zm-1.53-1.897L8.18 5.661a.79.79 0 00-.598-.101c-.43.095-.704.508-.615.921.38 1.75.573 3.5.577 5.249l3.36.02a.76.76 0 01.771.776.804.804 0 01-.815.765l-3.361-.02a25.37 25.37 0 01-.885 5.239.738.738 0 00.083.587c.223.361.709.47 1.085.245l10.243-6.126a.81.81 0 00.253-.237.749.749 0 00-.215-1.064z" fill="currentcolor" fill-rule="evenodd"></path>
+            </svg>
+        </button>
+    </form>
+
+    <div class="flash-message">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+            <div class="alert">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </div>
+
+    {% if title %}
+        <section class="content">
+            <div class="card">
+                <p class="heading">{{ title }}</p>
+                {% if description %}
+                <p class="description">{{ description }}</p>
+                {% endif %}
+                {% if transcript %}
+                <p class="transcript">{{ transcript }}</p>
+                {% endif %}
+                <div class="main-wrapper">
+                    <div class="col-1">
+                        <p class="author-tag">{% if youtube_channel %}YouTube Channel:{% else %}Authors:{% endif %}</p>
+                        <ul class="author-list">
+                            {% if youtube_channel %}
+                                <li>{{ youtube_channel }}</li>
+                            {% else %}
+                                {% for author in authors.split(', ') %}
+                                    <li>{{ author }}</li>
+                                {% endfor %}
+                            {% endif %}
+                        </ul>
+                        <button id="readMoreBtn" onclick="toggleAuthors()">Read More</button>                    
+                        <p class="date-tag">Publication Date: <time datetime="{{ publish_date }}">{{ publish_date }}</time></p>
+                    </div>
+                    <div class="col-2">
+                        {% if youtube_link %}
+                            <iframe width="560" height="315" src="https://www.youtube.com/embed/{{ youtube_link.split('v=')[-1] }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        {% else %}
+                            <img src="{{ top_image }}" class="top-image" alt="Top Image">
+                        {% endif %}
+                    </div>
+                </div>
+                {% if not youtube_link %}
+                    <p><span class="summary-tag">Summary: </span> {{ summary }}</p>
+                {% endif %}
+                <p class="sentiment-tag">Sentiment: {{ sentiment }}</p>
+            </div>
+        </section>
+    {% endif %}
+
+    <script>
+        function toggleAuthors() {
+            var authors = document.querySelectorAll(".author-list li");
+            if (authors.length < 6) {
+                var btn = document.getElementById("readMoreBtn")
+                btn.style.display = 'none'
+            }
+
+            // Toggle the display property of additional authors starting from the 6th author
+            for (var i = 5; i < authors.length; i++) {
+                authors[i].classList.toggle("hidden");
+            }
+
+            // Change the button text based on the current state
+            var readMoreBtn = document.getElementById("readMoreBtn");
+            if (authors[5].classList.contains("hidden")) {
+                readMoreBtn.textContent = "Read More";
+            } else {
+                readMoreBtn.textContent = "Read Less";
+            }
+        }
+
+        function initializeAuthors() {
+            toggleAuthors(); // Initialize the state
+        }
+
+        function toggleTheme() {
+            const themeStyle = document.getElementById('theme-style');
+            const themeToggle = document.getElementById('theme-toggle');
+
+            if (themeToggle.checked) {
+                themeStyle.href = "{{ url_for('static', filename='light-theme.css') }}";
+                localStorage.setItem('theme', 'light');
+            } else {
+                themeStyle.href = "{{ url_for('static', filename='dark-theme.css') }}";
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+    </script>
+</body>
+</html>
