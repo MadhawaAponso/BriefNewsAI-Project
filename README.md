@@ -37,6 +37,3 @@ Contributions are welcome! If you'd like to contribute to BriefNewsAI, please fo
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## Contact
-
-For any inquiries or feedback, please contact [Your Name] at [your.email@example.com].
