@@ -1,39 +1,44 @@
-# BriefNewsAI
+# 📰🔍 Web & YouTube Analyzer with Flask
 
-BriefNewsAI is a web application designed to provide summaries of both articles and YouTube videos based on provided links.
+This Flask web app allows users to input either a **YouTube video link** or a **news/article URL**. It then intelligently analyzes the content to provide:
 
-## Features
+- 📃 **Summaries** of articles and video transcripts  
+- 😊 **Sentiment analysis** for articles  
+- 🎬 **YouTube video metadata** (title, description, creator, transcript)  
+- 🧠 **Smart NLP** features powered by `nltk`, `TextBlob`, `newspaper3k`, and `YouTube Transcript API`
 
-- **Article Summarization:** Enter the URL of an article, and BriefNewsAI generates a concise summary of its content.
-- **YouTube Video Summarization:** Input the URL of a YouTube video, and BriefNewsAI extracts key points and main ideas from the video.
+---
 
-## How It Works
+## 🚀 Features
 
-BriefNewsAI uses advanced natural language processing (NLP) and video analysis techniques to generate accurate and informative summaries. It leverages:
-- **Article Summarization:** Extractive text summarization techniques.
-- **YouTube Video Summarization:** Speech-to-text transcription and key phrase extraction.
+- ✅ Accepts **any valid URL** – smartly distinguishes between YouTube and web articles.
+- 📄 **Web Article Processing:**
+  - Extracts title, publish date, authors, top image.
+  - Summarizes content using sentence splitting.
+  - Analyzes sentiment (happy, sad, or neutral).
+- 📺 **YouTube Video Processing:**
+  - Fetches title, description, and creator name.
+  - Extracts and displays video transcript (if available).
+- 🧠 Uses **TextBlob** and **NLTK** for sentiment and NLP.
+- 🧪 Clean, modular backend built with **Flask**.
 
-## Usage
+---
 
-1. **Input:** Provide a valid URL to either an article or a YouTube video in the provided input box.
-2. **Output:** Receive a summarized version of the content on submitting the link.
+## 🖼️ App Screenshot
 
-## Installation
+> _Example: Analyzing a YouTube video and a blog article using the app._
 
-There's no installation required to use BriefNewsAI as it is a web-based application accessible via any modern web browser.
+---
 
-## Technologies Used
+## 🧩 Workflow
 
-- Python Flask framework for the backend
-- HTML/CSS/JavaScript for the frontend
-- Libraries such as NLTK (Natural Language Toolkit) for NLP tasks
-- YouTube Data API for video analysis
+```mermaid
+graph TD;
+    A[User Submits URL] --> B{Is it YouTube?}
+    B -- Yes --> C[Fetch Metadata with pytube]
+    C --> D[Get Transcript with YouTubeTranscriptAPI]
+    D --> E[Render Title, Description, Creator, Transcript]
 
-## Contributions
-
-Contributions are welcome! If you'd like to contribute to BriefNewsAI, please fork the repository and submit a pull request with your proposed changes.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
+    B -- No --> F[Scrape Article with newspaper3k]
+    F --> G[Summarize & Sentiment Analysis with TextBlob]
+    G --> H[Render Title, Summary, Sentiment, Author, Image]
