@@ -23,6 +23,15 @@ This Flask web app allows users to input either a **YouTube video link** or a **
 - 🧪 Clean, modular backend built with **Flask**.
 
 ---
+## 🧠 About
+
+This application allows users to input a URL (either from a web article or a YouTube video) and get a summary, sentiment analysis, and other useful details.
+
+Key Features:
+- **Article Parsing**: Extracts the title, authors, and text from web articles.
+- **YouTube Parsing**: Fetches video title, description, and transcript (if available).
+- **Text Summarization**: Provides a short summary of the article or transcript.
+- **Sentiment Analysis**: Analyzes the text's sentiment (positive, negative, or neutral).
 
 ## 🖼️ App Screenshot
 
